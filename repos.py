@@ -36,7 +36,7 @@ def main(argv):
 	repos_total = 0
 	for repo in stalegh.GetRepos(ghc, organizations=args.organizations, repos=args.repos):
 		repos_total += 1
-		if repo.updated_at > stale_cutoff:
+		if repo.pushed_at > stale_cutoff or repo.updated_at > stale_cutoff:
 			LogScanProgress(len(repos_to_process), repos_total, f'Skipped: has recent modification: {repo}')
 			continue
 		repos_to_process.add(repo)
@@ -51,7 +51,7 @@ def main(argv):
 			raise NotImplementedError
 		elif args.action == 'print':
 			name = f'https://github.com/{repo.full_name}'
-			age = now - repo.updated_at
+			age = min(now - repo.updated_at, now - repo.pushed_at)
 			print(f'{name} last updated {age.days} days ago, delete_branch_on_merge={repo.delete_branch_on_merge}')
 		i += 1
 		stalegh.Log(f'{i}/{len(repos_to_process)} repos processed: {repo}')
