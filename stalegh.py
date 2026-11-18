@@ -84,7 +84,7 @@ class PullRequest(object):
 
 	def close(self, comment):
 		# TODO: error checking?
-		self._pr.create_comment(comment)
+		self._pr.create_issue_comment(comment)
 		self._pr.edit(state='closed')
 
 def GetAllRepos(ghc, organizations=None, repos=None):

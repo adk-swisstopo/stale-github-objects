@@ -52,7 +52,7 @@ def main(argv):
 	i = 0
 	for pr in prs_to_process:
 		if args.action == 'close':
-			pr.close()
+			pr.close(f'Closing PR last updated more than {args.days} days ago.')
 		elif args.action == 'print':
 			print(f'{pr} last updated {pr.GetAge().days} days ago')
 		i += 1
