@@ -111,10 +111,12 @@ def ListBranches(ghc, organizations=None, repos=None):
 		for branch in repo.get_branches():
 			yield Branch(repo=repo, branch=branch)
 
-def ListPrs(ghc, organizations=None, repos=None):
+def ListPrs(ghc, organizations=None, repos=None, user=None):
+	# TODO: use ghc.search_issues instead
 	for repo in GetRepos(ghc, organizations=organizations, repos=repos):
 		for pr in repo.get_pulls():
-			yield PullRequest(repo=repo, pr=pr)
+			if user is None or pr.user.login == user:
+				yield PullRequest(repo=repo, pr=pr)
 
 def FindToken():
 	token = os.getenv('GITHUB_TOKEN')

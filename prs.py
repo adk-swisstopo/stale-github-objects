@@ -18,6 +18,7 @@ def main(argv):
 	parser.add_argument('-O', '--organizations', action='append')
 	parser.add_argument('-r', '--repos', action='append')
 	parser.add_argument('-a', '--action', default='print')
+	parser.add_argument('-u', '--user', default='adk-swisstopo')
 	args = parser.parse_args(argv[1:])
 	if args.action not in ('print', 'delete'):
 		print(f'Invalid action: {args.action} must be "print" or "delete".')
@@ -34,7 +35,7 @@ def main(argv):
 
 	prs_to_process = set()
 	prs_total = 0
-	for pr in stalegh.ListPrs(ghc, organizations=args.organizations, repos=args.repos):
+	for pr in stalegh.ListPrs(ghc, organizations=args.organizations, repos=args.repos, user=args.user):
 		prs_total += 1
 		if not pr.is_open():
 			LogScanProgress(len(prs_to_process), prs_total, f'Skipped: PR is not open: {pr}')
