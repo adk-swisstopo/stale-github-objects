@@ -20,10 +20,10 @@ def main(argv):
 	parser.add_argument('-a', '--action', default='print')
 	parser.add_argument('-u', '--user', default='adk-swisstopo')
 	args = parser.parse_args(argv[1:])
-	if args.action not in ('print', 'delete'):
-		print(f'Invalid action: {args.action} must be "print" or "delete".')
+	if args.action not in ('print', 'close'):
+		print(f'Invalid action: {args.action} must be "print" or "close".')
 		return -1
-	if args.action == 'delete' and args.days < 7:
+	if args.action == 'close' and args.days < 7:
 		print('Automatically closing PRs that are only {args.days} days old sounds dangerous. Not proceeding.', file=sys.stderr)
 		return -1
 	if not args.repos and not args.organizations:
@@ -51,7 +51,7 @@ def main(argv):
 	#       don't close more than Y% per repo that have more than Z PRs open
 	i = 0
 	for pr in prs_to_process:
-		if args.action == 'delete':
+		if args.action == 'close':
 			pr.close()
 		elif args.action == 'print':
 			print(f'{pr} last updated {pr.GetAge().days} days ago')
